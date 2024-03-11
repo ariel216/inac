@@ -1,0 +1,20 @@
+---
+import Layout from './layout.astro'
+import { turso } from '../turso'
+
+const id_carrera = 2
+
+const { rows } = await turso.execute({
+  sql: 'SELECT * FROM requisitos WHERE id_carrera = ?',
+  args: [id_carrera!]
+})
+---
+<Layout title='Requisitos'>
+	<section>				
+		<ul>
+			{rows.map((requisito) => (
+				<li>{requisito.descripcion}</li>
+			))}
+		</ul>
+	</section>
+</Layout>
