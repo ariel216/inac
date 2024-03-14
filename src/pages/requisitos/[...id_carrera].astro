@@ -1,8 +1,7 @@
 ---
-import Layout from './layout.astro'
-import { turso } from '../turso'
-
-const id_carrera = 2
+import Layout from '../layout.astro'
+import { turso } from '../../turso'
+const { id_carrera } = Astro.params;
 
 const { rows } = await turso.execute({
   sql: 'SELECT * FROM requisitos WHERE id_carrera = ?',

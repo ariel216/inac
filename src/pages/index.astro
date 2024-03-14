@@ -8,7 +8,9 @@ const { rows } = await turso.execute('SELECT * FROM carrera')
 	<section>				
 		<ul>
 			{rows.map((carrera) => (
-				<li>{carrera.nombre}</li>
+				<li>
+					<a href={`/requisitos/${carrera.id_carrera}`}>{carrera.nombre}</a>
+				</li>
 			))}
 		</ul>
 	</section>
