@@ -1,5 +1,6 @@
 ---
 import Layout from '../layout.astro'
+import Formulario from '../../components/Formulario.jsx';
 import { turso } from '../../turso'
 const { id_carrera } = Astro.params;
 
@@ -7,13 +8,19 @@ const { rows } = await turso.execute({
   sql: 'SELECT * FROM requisitos WHERE id_carrera = ?',
   args: [id_carrera!]
 })
+
 ---
 <Layout title='Requisitos'>
-	<section>				
-		<ul>
-			{rows.map((requisito) => (
-				<li>{requisito.descripcion}</li>
-			))}
-		</ul>
+	<section class="grid grid-cols-2 justify-between">
+		<article>
+			<ul>
+				{rows.map((requisito) => (
+					<li>{requisito.descripcion}</li>
+				))}
+			</ul>
+		</article>
+		<article>
+			<Formulario client:load/>
+		</article>
 	</section>
 </Layout>
