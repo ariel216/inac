@@ -1,17 +1,14 @@
 ---
 import Layout from './layout.astro'
 import { turso } from '../turso'
+import Card from '../components/card.astro'
 
 const { rows } = await turso.execute('SELECT * FROM carrera')
 ---
 <Layout title='Inicio'>
-	<section>				
-		<ul>
-			{rows.map((carrera) => (
-				<li>
-					<a href={`/requisitos/${carrera.id_carrera}`}>{carrera.nombre}</a>
-				</li>
-			))}
-		</ul>
+	<section class="grid grid-cols-3 gap-4">
+		{rows.map((carrera) => (
+			<Card carrera={carrera}></Card>		
+		))}		
 	</section>
 </Layout>
