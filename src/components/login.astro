@@ -1,0 +1,10 @@
+<article class="w-full">        
+    <button class="bg-indigo-900 text-white rounded-md p-2 hover:bg-indigo-950" id="login">Iniciar sesión</button>
+</article>
+
+<script>
+    const { signIn } = await import("auth-astro/client")
+
+    document.querySelector("#login").onclick = () => signIn("google")
+
+</script>

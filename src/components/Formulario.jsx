@@ -13,8 +13,9 @@ export default function Formulario() {
 
     return (
         <>            
-            <article class="flex w-screen">
+            <article class="w-full">                
                 <form class="bg-gray-100 rounded-lg shadow-lg px-6 pt-4 pb-6 mb-4">
+                    <h4 class="text-2xl mb-2">Requisitos:</h4>
                     {requisitos.map((item)=>(
                         <div class="mb-3">
                             <label class="block text-gray-700 text-sm font-bold mb-1" for="nombre">
@@ -25,8 +26,9 @@ export default function Formulario() {
                     ))}
                 </form>         
             </article>
-            <article class="flex w-dvw">
+            <article class="w-full">
                 <form class="bg-gray-100 rounded-lg shadow-lg px-6 pt-4 pb-6 mb-4">
+                    <h4 class="text-2xl mb-2">Datos Personales:</h4>
                     <div class="mb-3">
                         <label class="block text-gray-700 text-sm font-bold mb-1" for="nombre">
                             Nro. Carnet:
@@ -69,6 +71,7 @@ export default function Formulario() {
                         </label>
                         <input class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight border-indigo-900 focus:outline-none focus:shadow-md focus:shadow-indigo-200" id="correo" type="email" placeholder="Correo" />
                     </div>
+                    <button class="bg-indigo-900 text-white rounded-md p-2 hover:bg-indigo-950">Registrar</button>
                 </form>
             </article>
         </>

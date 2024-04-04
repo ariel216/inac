@@ -3,11 +3,13 @@ import preact from '@astrojs/preact';
 import tailwind from "@astrojs/tailwind";
 import node from '@astrojs/node';
 
+import auth from "auth-astro";
+
 // https://astro.build/config
 export default defineConfig({
-  integrations: [tailwind(), preact()],
-  output:'server',
+  integrations: [tailwind(), preact(), auth()],
+  output: 'server',
   adapter: node({
-    mode: 'standalone',
-  }),
+    mode: 'standalone'
+  })
 });
