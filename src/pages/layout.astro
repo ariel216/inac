@@ -1,4 +1,7 @@
 ---
+import { getSession } from "auth-astro/server";
+const session = await getSession(Astro.request)
+
 interface Props {
   title: string;
 }
@@ -14,8 +17,9 @@ const { title } = Astro.props;
 		<title>{title} - INAC</title>
 	</head>
 	<body class="grid h-screen bg-slate-200 grid-rows-[60px,1fr,60px] gap-4">
-		<header class="bg-indigo-900 text-slate-200 m-auto w-full p-4">
+		<header class="flex justify-between bg-indigo-900 text-slate-200 m-auto w-full p-4">
 			<a href="/"><h2 class="text-2xl font-medium">INAC</h2></a>
+			{session !== null ? <button id="logout" class="bg-slate-200 text-black p-1 rounded-md hover:bg-slate-300">Cerrar Sesión</button> : <></>}
 		</header>
 		<main class="m-auto flex h-full max-w-screen-lg flex-col items-center justify-between px-4">			
 			<slot/>
@@ -25,3 +29,8 @@ const { title } = Astro.props;
 		</footer>	
 	</body>
 </html>
+<script>
+	const { signOut } = await import("auth-astro/client")
+
+	document.querySelector("#logout").onclick = () => signOut()
+</script>

@@ -1,6 +1,6 @@
 ---
-import { getSession } from "auth-astro/server"
-import Layout from '../layout.astro'
+import { getSession } from "auth-astro/server";
+import Layout from '../layout.astro';
 import Formulario from '../../components/Formulario.jsx';
 import Login from "../../components/login.astro";
 
@@ -9,6 +9,6 @@ const session = await getSession(Astro.request)
 <Layout title='Requisitos'>
 	<section class="grid grid-cols-2 gap-4">
 		<!-- {session === null ? <Intro /> : <Vote user={session.user} />} -->
-		{session === null ? <Login/> : <Formulario client:only/>}		
+		{session === null ? <Login/> : <Formulario client:only/>}
 	</section>
 </Layout>
