@@ -1,0 +1,51 @@
+---
+const { id } = Astro.props;
+import { turso } from '../turso';
+import Requisitos from '../components/Requisitos.astro';
+
+const { rows } = await turso.execute({
+  sql: 'SELECT * FROM carrera WHERE id_carrera = ?',
+  args: [id!]
+})
+
+const carrera = rows[0];
+---
+<section class="bg-gray-50 dark:bg-gray-800">
+    <div class="max-w-screen-xl px-4 py-8 mx-auto space-y-12 lg:space-y-20 lg:py-24 lg:px-6">       
+        <div class="items-center gap-8 lg:grid lg:grid-cols-2 xl:gap-16">
+            <div class="flex flex-col">
+                <div class="flex flex-col mb-3">
+                    <label for="">Nro. Carnet:</label>
+                    <input type="text" class="max-w-lg rounded-lg" placeholder="Ingresa tu número de carnet">
+                </div>
+                <div class="flex flex-col mb-3">
+                    <label for="">Nombres:</label>
+                    <input type="text" class="max-w-lg rounded-lg" placeholder="Ingresa tus nombres">
+                </div>
+                <div class="flex flex-col mb-3">
+                    <label for="">Primer Apellido:</label>
+                    <input type="text" class="max-w-lg rounded-lg" placeholder="Ingresa tu primer apellido">
+                </div>
+                <div class="flex flex-col mb-3">
+                    <label for="">Segundo Apellido:</label>
+                    <input type="text" class="max-w-lg rounded-lg" placeholder="Ingresa tu segundo apellido">
+                </div>
+                <div class="flex flex-col mb-3">
+                    <label for="">Dirección:</label>
+                    <input type="text" class="max-w-lg rounded-lg" placeholder="Ingresa tu dirección">
+                </div>
+                <div class="flex">
+                    <a href="#" class="text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 sm:mr-2 lg:mr-0 dark:bg-purple-600 dark:hover:bg-purple-700 focus:outline-none dark:focus:ring-purple-800"> Preinscribir</a>
+                </div>
+            </div>
+            <div class="text-gray-500 sm:text-lg dark:text-gray-400">
+                <h2 class="mb-4 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white">{carrera.nombre}</h2>
+                <p class="mb-8 font-light lg:text-xl">{carrera.descripcion}</p>               
+                <ul role="list" class="pt-8 space-y-5 border-t border-gray-200 my-7 dark:border-gray-700">
+                   <Requisitos id={id}/>
+                </ul>
+                <p class="font-light lg:text-xl">Deliver great service experiences fast - without the complexity of traditional ITSM solutions.</p>
+            </div>
+        </div>
+    </div>
+</section>

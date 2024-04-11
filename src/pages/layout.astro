@@ -1,6 +1,9 @@
 ---
 import { getSession } from "auth-astro/server";
 const session = await getSession(Astro.request)
+import '../assets/output.css';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
 
 interface Props {
   title: string;
@@ -8,29 +11,37 @@ interface Props {
 const { title } = Astro.props;
 ---
 
-<html lang="es">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>{title} - INAC</title>
-	</head>
-	<body class="grid h-screen bg-slate-200 grid-rows-[60px,1fr,60px] gap-4">
-		<header class="flex justify-between bg-indigo-900 text-slate-200 m-auto w-full p-4">
-			<a href="/"><h2 class="text-2xl font-medium">INAC</h2></a>
-			{session !== null ? <button id="logout" class="bg-slate-200 text-black p-1 rounded-md hover:bg-slate-300">Cerrar Sesión</button> : <></>}
-		</header>
-		<main class="m-auto flex h-full max-w-screen-lg flex-col items-center justify-between px-4">			
-			<slot/>
-		</main>
-		<footer class="text-slate-700 m-auto w-full p-4 text-center mb-0">
-			Inac @ Adesdev
-		</footer>	
-	</body>
-</html>
-<script>
-	const { signOut } = await import("auth-astro/client")
+<!DOCTYPE html>
+ <html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{title} - INAC</title>
 
-	document.querySelector("#logout").onclick = () => signOut()
-</script>
+    <!-- Meta SEO -->
+    <meta name="title" content="INAC Inscripciones">
+    <meta name="description" content="Sitio para inscripciones INAC">
+    <meta name="robots" content="index, follow">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="language" content="Spanish">
+    <meta name="author" content="Ades dev">
+
+    <!-- Favicon -->
+    <!-- <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"> -->
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    <!-- <script async defer src="https://buttons.github.io/buttons.js"></script> -->
+</head>
+<body>    
+    <Navbar/>
+    <section>
+        <slot/>
+    </section>    
+    <Footer/>
+    <script src="https://unpkg.com/flowbite@1.4.1/dist/flowbite.js"></script>
+</body>
+</html>
