@@ -1,28 +1,31 @@
 import type { APIRoute } from 'astro';
-import type { Session } from '@auth/core/types';
-
+import { turso } from '../../turso';
 
 export const POST: APIRoute = async ({ request }) => {
 
     if (request.headers.get("Content-Type") === "application/json") {
         const body = await request.json();
-        const nro_carnet = body.nro_carnet;
-        const nombres = body.nombres;
-        const primer_apellido = body.primer_apellido;
-        const segundo_apellido = body.segundo_apellido;
-        const direccion = body.direccion;
-        const telefono = body.telefono;
+        const {nro_documento, nombres, primer_apellido, segundo_apellido, direccion, telefono, correo, id_carrera} = body;
+
+        const {rows} = await turso.execute({
+          sql: `insert into alumnos (nro_documento, nombres, primer_apellido, segundo_apellido, direccion, telefono)
+                values(?,?,?,?,?,?) RETURNING *`,
+          args: [nro_documento, nombres, primer_apellido, segundo_apellido, direccion, telefono]
+        });
+        
+        const id_alumno = rows[0]?.id_alumno;
+
+        await turso.execute({
+          sql: `insert into preinscripciones (id_alumno, id_carrera, correo)
+                values(?,?,?)`,
+          args: [id_alumno, id_carrera, correo]
+        });
 
         return new Response(JSON.stringify({
-          mensaje: "Registro Correto",
           codigo: 1,
+          mensaje: "Registro Correto",          
           contenido: {
-            "nro_carnet":nro_carnet,
-            "nombres":nombres,
-            "primer_apellido":primer_apellido,
-            "segundo_apellido":segundo_apellido,
-            "direccion":direccion,
-            "telefono":telefono
+            "id_alumno": id_alumno
           }
         }), {
           status: 200

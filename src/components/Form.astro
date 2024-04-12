@@ -1,10 +1,41 @@
-    <section class="bg-gray-50 dark:bg-gray-800">
-        <div class="max-w-screen-xl px-4 py-8 mx-auto lg:py-16 lg:px-6">
-            <div class="max-w-screen-sm mx-auto text-center">
-                <h2 class="mb-4 text-3xl font-extrabold leading-tight tracking-tight text-gray-900 dark:text-white">Start your free trial today</h2>
-                <p class="mb-6 font-light text-gray-500 dark:text-gray-400 md:text-lg">Try Landwind Platform for 30 days. No credit card required.</p>
-                <a href="#" class="text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 focus:outline-none dark:focus:ring-purple-800">Free trial for 30 days</a>
-                <input class="rounded-lg border-purple-700" type="text" placeholder="Nombres">
-            </div>
+---
+import { getSession } from "auth-astro/server";
+const session = await getSession(Astro.request)
+
+---
+<div class="flex flex-col">
+    <div class="flex flex-col space-y-2 items-center justify-center mb-5">                    
+        <h2 class="font-light lg:text-xl mb-4">Formulario de Preinscripción:</h2>
+        <img class="rounded-full w-32" src={session?.user?.image} alt={session?.user?.email} />
+        <p>{session?.user?.name}</p>
+        <p>{session?.user?.email}</p>                               
+    </div> 
+    <form id="loginForm">
+        <div class="flex flex-col mb-3">
+            <label for="">Nro. Carnet:</label>
+            <input type="text" name="nro_telefono" id="nro_telefono" class="w-full rounded-lg" placeholder="Ingresa tu número de carnet">
         </div>
-    </section>
+        <div class="flex flex-col mb-3">
+            <label for="">Dirección:</label>
+            <input type="text" name="direccion" id="direccion" class="w-full rounded-lg" placeholder="Ingresa tu dirección">
+        </div>
+        <div class="flex flex-col mb-3">
+            <label for="">Teléfono:</label>
+            <input type="text" name="telefono" id="telefono" class="w-full rounded-lg" placeholder="Ingresa tu número de teléfono">
+        </div>
+        <div class="flex items-center justify-center mt-4">
+            <button type="submit" class="text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 sm:mr-2 lg:mr-0 dark:bg-purple-600 dark:hover:bg-purple-700 focus:outline-none dark:focus:ring-purple-800"> Preinscribir</button>
+        </div>
+    </form>
+</div>
+<script>
+    const loginForm = document.getElementById("loginForm");
+    loginForm?.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const nro_telefono = document.getElementById('nro_telefono');
+        const direccion = document.getElementById('direccion');
+        const telefono = document.getElementById('telefono');
+        console.log('');
+      
+    });
+</script>
