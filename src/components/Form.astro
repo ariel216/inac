@@ -1,7 +1,7 @@
 ---
+const { id } = Astro.props;
 import { getSession } from "auth-astro/server";
 const session = await getSession(Astro.request)
-
 ---
 <div class="flex flex-col">
     <div class="flex flex-col space-y-2 items-center justify-center mb-5">                    
@@ -11,9 +11,12 @@ const session = await getSession(Astro.request)
         <p>{session?.user?.email}</p>                               
     </div> 
     <form id="loginForm">
+        <input type="text" value={id} id="id_carrera" hidden>
+        <input type="text" value={session?.user?.email} id="correo" hidden>
+        <input type="text" value={session?.user?.name} id="nombres" hidden>
         <div class="flex flex-col mb-3">
             <label for="">Nro. Carnet:</label>
-            <input type="text" name="nro_telefono" id="nro_telefono" class="w-full rounded-lg" placeholder="Ingresa tu número de carnet">
+            <input type="text" name="nro_documento" id="nro_documento" class="w-full rounded-lg" placeholder="Ingresa tu número de carnet">
         </div>
         <div class="flex flex-col mb-3">
             <label for="">Dirección:</label>
@@ -21,21 +24,65 @@ const session = await getSession(Astro.request)
         </div>
         <div class="flex flex-col mb-3">
             <label for="">Teléfono:</label>
-            <input type="text" name="telefono" id="telefono" class="w-full rounded-lg" placeholder="Ingresa tu número de teléfono">
+            <input type="number" name="telefono" id="telefono" class="w-full rounded-lg" placeholder="Ingresa tu número de teléfono">
         </div>
+        <p class="font-light text-balance lg:text-xl mb-4 text-center mt-3">
+            Asegúrate de contar con <span class="font-bold text-black">todos los Requisitos</span> al momento de la inscripción.
+        </p>   
         <div class="flex items-center justify-center mt-4">
-            <button type="submit" class="text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 sm:mr-2 lg:mr-0 dark:bg-purple-600 dark:hover:bg-purple-700 focus:outline-none dark:focus:ring-purple-800"> Preinscribir</button>
+            <button id="btn" type="submit" class="text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 sm:mr-2 lg:mr-0 dark:bg-purple-600 dark:hover:bg-purple-700 focus:outline-none dark:focus:ring-purple-800"> Preinscribir</button>
         </div>
     </form>
+    <div id="message" hidden class="text-gray-500 sm:text-lg dark:text-gray-400 mt-5 text-center">
+        <p class="font-light lg:text-xl mb-4" id="textMessage"> </p>   
+        <a href="/" class="bg-slate-200 text-black px-3 py-2 rounded-md hover:bg-slate-300"> Inicio</a>
+    </div>
 </div>
 <script>
-    const loginForm = document.getElementById("loginForm");
-    loginForm?.addEventListener("submit", (e) => {
+    const { signOut } = await import("auth-astro/client");
+    import { $ } from "../lib/dom_selector";
+    const loginForm:any = $("#loginForm");
+    const message = $("#message");
+    let textMessage = $("#textMessage");
+
+    $("#logout").onclick = () => signOut();
+
+    loginForm?.addEventListener("submit", (e:any) => {
         e.preventDefault();
-        const nro_telefono = document.getElementById('nro_telefono');
-        const direccion = document.getElementById('direccion');
-        const telefono = document.getElementById('telefono');
-        console.log('');
-      
+
+        const nro_documento:any = $('#nro_documento');
+        const direccion:any = $('#direccion');
+        const telefono:any = $('#telefono');
+        const id_carrera:any = $('#id_carrera');
+        const correo:any = $('#correo');
+        const nombres:any = $('#nombres');
+
+        let _data = {
+            nro_documento:nro_documento.value,
+            nombres:nombres.value,
+            direccion:direccion.value,
+            telefono:telefono.value,
+            correo:correo.value,
+            id_carrera:id_carrera.value
+        }
+        
+        fetch(`http://localhost:4321/api/preinscripcion`, {
+            method: "POST",
+            body:JSON.stringify(_data),
+            headers: {"Content-type": "application/json"}
+        })
+
+        .then(response => response.json()) 
+        .then((json)=> {
+            loginForm.reset();
+            loginForm.style.display = "none";
+            message.hidden=false;
+            if(json.codigo === 1){
+                textMessage.innerHTML = "El registro de preinscripción fue completado, pronto nos comunicaremos contigo a través del teléfono registrado.";
+            }else{                
+                textMessage.innerHTML = "El correo ya fue registrado, no es posible registrar la preinscripción.";                            
+            }            
+        })
+        .catch(err => console.log(err));      
     });
 </script>

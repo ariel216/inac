@@ -8,6 +8,8 @@
 </section>
 
 <script>
+    import { $ } from "../lib/dom_selector";
     const { signIn } = await import("auth-astro/client");
-    document.querySelector("#login").onclick = () => signIn("google");
+    $("#login").onclick = () => signIn("google");
+
 </script>

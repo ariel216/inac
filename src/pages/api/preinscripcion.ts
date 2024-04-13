@@ -5,12 +5,23 @@ export const POST: APIRoute = async ({ request }) => {
 
     if (request.headers.get("Content-Type") === "application/json") {
         const body = await request.json();
-        const {nro_documento, nombres, primer_apellido, segundo_apellido, direccion, telefono, correo, id_carrera} = body;
+        const {nro_documento, nombres, direccion, telefono, correo, id_carrera} = body;
+
+        const registrosPrevios = await verificar(correo);
+
+        if((registrosPrevios).length>0){
+          return new Response(JSON.stringify({
+            codigo: 0,
+            mensaje:  `El correo ${correo} ya fue registrado`, 
+          }), {
+            status: 400
+          })
+        }
 
         const {rows} = await turso.execute({
-          sql: `insert into alumnos (nro_documento, nombres, primer_apellido, segundo_apellido, direccion, telefono)
-                values(?,?,?,?,?,?) RETURNING *`,
-          args: [nro_documento, nombres, primer_apellido, segundo_apellido, direccion, telefono]
+          sql: `insert into alumnos (nro_documento, nombres, direccion, telefono)
+                values(?,?,?,?) RETURNING *`,
+          args: [nro_documento, nombres, direccion, telefono]
         });
         
         const id_alumno = rows[0]?.id_alumno;
@@ -32,4 +43,12 @@ export const POST: APIRoute = async ({ request }) => {
         })
     }
     return new Response(null, { status: 400 });
+}
+
+const verificar = async (correo:string)=>{
+  const {rows} = await turso.execute({
+    sql: `select * from preinscripciones where correo = ? `,
+    args: [correo]
+  });
+  return rows;
 }
