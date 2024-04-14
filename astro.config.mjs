@@ -1,15 +1,12 @@
 import { defineConfig } from 'astro/config';
-import preact from '@astrojs/preact';
+import netlify from '@astrojs/netlify';
 import tailwind from "@astrojs/tailwind";
-import node from '@astrojs/node';
 
 import auth from "auth-astro";
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [tailwind(), preact(), auth()],
+  integrations: [tailwind(), auth()],
   output: 'server',
-  adapter: node({
-    mode: 'standalone'
-  })
+  adapter: netlify(),
 });
